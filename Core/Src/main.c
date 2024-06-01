@@ -22,9 +22,9 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-#include "fonts.h"
-#include "tft.h"
-#include "functions.h"
+#include "ScreenManager.h"
+#include "Screen.h"
+#include "Serial.h"
 
 /* USER CODE END Includes */
 
@@ -36,6 +36,8 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 uint16_t ID = 0;
+
+struct screenManager scrmng;
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -66,7 +68,13 @@ static void MX_TIM1_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+int initModules()
+{
+  int err = -1;
+  screenManager_init(&scrmng);
 
+  return err;
+}
 /* USER CODE END 0 */
 
 /**
@@ -104,27 +112,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start(&htim1);
 
-  ID = readID();
-
-  HAL_Delay(100);
-
-  tft_init(ID);
-
-  setRotation(0);
-
-  fillScreen(BLACK);
-
-  testFillScreen();
-  testLines(CYAN);
-  testFastLines(RED,BLUE);
-  testFilledCircles(10, MAGENTA);
-  testCircles(10,WHITE);
-
-  fillScreen(BLACK);
-
-  setRotation(0);
-
-  printnewtstr(100,RED, &mono12x7bold, 2 , "HOLA MUNDO");
+  initModules();
   /* USER CODE END 2 */
 
   /* Infinite loop */
