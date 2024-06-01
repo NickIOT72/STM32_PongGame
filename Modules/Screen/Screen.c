@@ -2,7 +2,5 @@
 
 int screen_init( struct Screen *s )
 {
-  s->tChangeStart = 0;
-  s->allowTimerChange = false;
-  s->timerChangeReached = false;
+  timerCounter_init( &(s->tc) );
 }

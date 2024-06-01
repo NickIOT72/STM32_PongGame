@@ -26,6 +26,13 @@
 #include "Screen.h"
 #include "Serial.h"
 
+#include "screenIntro.h"
+#include "screenBlank.h"
+
+#include "fonts.h"
+#include "tft.h"
+#include "functions.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -63,17 +70,70 @@ static void MX_ADC1_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_TIM1_Init(void);
 /* USER CODE BEGIN PFP */
-
+void initModules();
+void selectScreen( struct screenManager *sm );
+void evaluateScreen( struct screenManager *sm );
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-int initModules()
+
+void evaluateScreen( struct screenManager *sm )
+{
+  switch (sm->actualScreen)
+  {
+  case 1:
+    timeCounter_verifyTimer( &scrmng.s.tc );
+    if ( scrmng.s.tc.timerReached )
+    {
+      timeCounter_endTimer(&scrmng.s.tc);
+      sm->actualScreen = 2;
+      selectScreen( &scrmng );
+      timeCounter_initTimer(&scrmng.s.tc);
+    }
+    break;
+  case 2:
+    timeCounter_verifyTimer( &scrmng.s.tc );
+    if ( scrmng.s.tc.timerReached )
+    {
+      timeCounter_endTimer(&scrmng.s.tc);
+      sm->actualScreen = 1;
+      selectScreen( &scrmng );
+      timeCounter_initTimer(&scrmng.s.tc);
+    }
+    break;
+  default:
+    break;
+  }
+}
+
+void selectScreen( struct screenManager *sm )
+{
+  sm->s.screenNumber = sm->actualScreen;
+  switch (sm->actualScreen)
+  {
+  case 1:
+    screenIntro_init(sm);
+    break;
+  case 2:
+    screenBlank_init(sm);
+    break;  
+  default:
+    break;
+  }
+}
+
+void initModules()
 {
   int err = -1;
-  screenManager_init(&scrmng);
-
-  return err;
+  ID = readID();
+  HAL_Delay(100);
+  tft_init(ID);
+  setRotation(1);
+  scrmng.totalScreens = 5;
+  err = screenManager_init(&scrmng);
+  selectScreen( &scrmng );
+  err = timeCounter_initTimer( &(scrmng.s.tc) );
 }
 /* USER CODE END 0 */
 
@@ -85,7 +145,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+  
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -113,14 +173,15 @@ int main(void)
   HAL_TIM_Base_Start(&htim1);
 
   initModules();
-  /* USER CODE END 2 */
 
+  /* USER CODE END 2 */
+  
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
-
+    evaluateScreen(&scrmng);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

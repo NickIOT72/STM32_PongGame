@@ -52,6 +52,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Modules/ScreenManager/ScreenManager.c
     Modules/Screen/Screen.c
     Modules/Serial/Serial.c
+    Modules/TimeCounter/TimeCounter.c
 )
 
 # Add include paths
@@ -61,6 +62,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     Modules/ScreenManager
     Modules/Screen
     Modules/Serial
+    Modules/TimeCounter
 )
 
 # Add project symbols (macros)

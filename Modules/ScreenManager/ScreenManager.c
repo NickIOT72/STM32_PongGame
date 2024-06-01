@@ -6,11 +6,3 @@ int screenManager_init( struct screenManager *sm)
   sm->actualScreen = 1;
   return err;
 }
-
-int screenManager_updateScreen(struct screenManager *sm , struct Screen *s)
-{
-  sm->s.delayScreenChange = s->delayScreenChange;
-  sm->s.screenNumber = s->screenNumber;
-  
-  screen_init(&(sm->s));
-}

@@ -1,8 +1,8 @@
 #ifndef __SCREENINTRO_H__
 #define __SCREENINTRO_H__
 
-#include "Screen.h"
+#include "ScreenManager.h"
 
-int screenIntro_show( struct Screen *s );
+int screenIntro_init( struct screenManager *sm  );
 
 #endif

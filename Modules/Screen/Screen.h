@@ -2,14 +2,12 @@
 #define __SCREEN_H__
 
 #include "moduleInit.h"
+#include "TimeCounter.h"
 
 struct Screen
 {
   uint8_t screenNumber;
-  unsigned long tChangeStart;
-  uint16_t delayScreenChange;
-  bool allowTimerChange;
-  bool timerChangeReached;
+  struct timeCounter tc;
 };
 
 int screen_init( struct Screen *s );
