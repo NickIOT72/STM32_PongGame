@@ -3,12 +3,12 @@
 #include "tft.h"
 #include "functions.h"
 
-#define DELAY_TIMER_MILLIS 2000 
+#define DELAY_TIMER_MILLIS 250 
 
 int screenBlank_show()
 {
   int err = -1;
-  fillScreen(BLACK);
+  fillScreen(WHITE);
   return err;
 }
 

@@ -8,14 +8,7 @@
 #ifndef _FUNCTIONS_H
 #define _FUNCTIONS_H
 
-#define	BLACK   0x0000
-#define	BLUE    0x001F
-#define	RED     0xF800
-#define	GREEN   0x07E0
-#define CYAN    0x07FF
-#define MAGENTA 0xF81F
-#define YELLOW  0xFFE0
-#define WHITE   0xFFFF
+#include "listColors.h"
 
 
 void drawPixel(int16_t x, int16_t y, uint16_t color);

@@ -28,6 +28,7 @@
 
 #include "screenIntro.h"
 #include "screenBlank.h"
+#include "screenMainMenu.h"
 
 #include "fonts.h"
 #include "tft.h"
@@ -80,30 +81,19 @@ void evaluateScreen( struct screenManager *sm );
 
 void evaluateScreen( struct screenManager *sm )
 {
-  switch (sm->actualScreen)
+  if ( sm->actualScreen == 1 )
   {
-  case 1:
     timeCounter_verifyTimer( &scrmng.s.tc );
     if ( scrmng.s.tc.timerReached )
     {
       timeCounter_endTimer(&scrmng.s.tc);
-      sm->actualScreen = 2;
+      sm->actualScreen = 3 ;
       selectScreen( &scrmng );
-      timeCounter_initTimer(&scrmng.s.tc);
     }
-    break;
-  case 2:
-    timeCounter_verifyTimer( &scrmng.s.tc );
-    if ( scrmng.s.tc.timerReached )
-    {
-      timeCounter_endTimer(&scrmng.s.tc);
-      sm->actualScreen = 1;
-      selectScreen( &scrmng );
-      timeCounter_initTimer(&scrmng.s.tc);
-    }
-    break;
-  default:
-    break;
+  }
+  else if (sm->actualScreen == 3)
+  {
+    screenMainMenu_verifyTimer();
   }
 }
 
@@ -117,6 +107,9 @@ void selectScreen( struct screenManager *sm )
     break;
   case 2:
     screenBlank_init(sm);
+    break;
+  case 3:
+    screenMainMenu_init(sm);
     break;  
   default:
     break;
@@ -127,13 +120,15 @@ void initModules()
 {
   int err = -1;
   ID = readID();
+  serialPrint("id: %x\n", ID && 0xffff);
   HAL_Delay(100);
   tft_init(ID);
   setRotation(1);
   scrmng.totalScreens = 5;
   err = screenManager_init(&scrmng);
+  scrmng.actualScreen = 3;
   selectScreen( &scrmng );
-  err = timeCounter_initTimer( &(scrmng.s.tc) );
+  //err = timeCounter_initTimer( &(scrmng.s.tc) );
 }
 /* USER CODE END 0 */
 
