@@ -152,7 +152,7 @@ void delay (uint32_t time)
 //#define SUPPORT_7735
 //#define SUPPORT_7781              //ST7781 +172 bytes
 //#define SUPPORT_8230              //UC8230 +118 bytes
-#define SUPPORT_8347D             //HX8347-D, HX8347-G, HX8347-I, HX8367-A +520 bytes, 0.27s
+//#define SUPPORT_8347D             //HX8347-D, HX8347-G, HX8347-I, HX8367-A +520 bytes, 0.27s
 //#define SUPPORT_8347A             //HX8347-A +500 bytes, 0.27s
 //#define SUPPORT_8352A             //HX8352A +486 bytes, 0.27s
 //#define SUPPORT_8352B             //HX8352B
@@ -162,7 +162,7 @@ void delay (uint32_t time)
 //#define SUPPORT_9326_5420         //ILI9326, SPFD5420 +246 bytes
 //#define SUPPORT_9342              //costs +114 bytes
 //#define SUPPORT_9806              //UNTESTED
-#define SUPPORT_9488_555          //costs +230 bytes, 0.03s / 0.19s
+//#define SUPPORT_9488_555          //costs +230 bytes, 0.03s / 0.19s
 //#define SUPPORT_B509_7793         //R61509, ST7793 +244 bytes
 //#define OFFSET_9327 32            //costs about 103 bytes, 0.08s
 

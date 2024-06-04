@@ -200,7 +200,7 @@ uint32_t readReg32(uint16_t reg);
 
 uint32_t readReg40(uint16_t reg);
 
-uint8_t cursor_y  =0, cursor_x    = 0;
+uint16_t cursor_y  =0, cursor_x    = 0;
 uint8_t textsize  = 1;
 uint16_t textcolor =0xffff,  textbgcolor = 0xFFFF;
 uint8_t wrap      = true;
@@ -2238,7 +2238,7 @@ case 0x4532:    // thanks Leodino
             0xC5, 4, 0x00, 0x48, 0x00, 0x48,    //VCOM  Control 1 [00 40 00 40]
             0xB4, 1, 0x00,      //Inversion Control [00]
             0xB6, 3, 0x02, 0x02, 0x3B,  // Display Function Control [02 02 3B]
-#define GAMMA9486 4
+#define GAMMA9486 5
 #if GAMMA9486 == 0
             // default GAMMA terrible
 #elif GAMMA9486 == 1
@@ -3658,8 +3658,8 @@ size_t write(uint8_t c)
 
         if(c == '\n') {
             cursor_x  = 0;
-            cursor_y += (int16_t)textsize *
-                        (uint8_t)pgm_read_byte(&gfxFont->yAdvance);
+            cursor_y += ((int16_t)textsize *
+                        (uint8_t)pgm_read_byte(&gfxFont->yAdvance))%_height;
         } else if(c != '\r') {
             uint8_t first = pgm_read_byte(&gfxFont->first);
             if((c >= first) && (c <= (uint8_t)pgm_read_byte(&gfxFont->last))) {
@@ -3671,12 +3671,12 @@ size_t write(uint8_t c)
                     int16_t xo = (int8_t)pgm_read_byte(&glyph->xOffset); // sic
                     if(wrap && ((cursor_x + textsize * (xo + w)) > _width)) {
                         cursor_x  = 0;
-                        cursor_y += (int16_t)textsize *
-                          (uint8_t)pgm_read_byte(&gfxFont->yAdvance);
+                        cursor_y += ((int16_t)textsize *
+                          (uint8_t)pgm_read_byte(&gfxFont->yAdvance))%_height;
                     }
                     drawChar(cursor_x, cursor_y, c, textcolor, textbgcolor, textsize);
                 }
-                cursor_x += (uint8_t)pgm_read_byte(&glyph->xAdvance) * (int16_t)textsize;
+                cursor_x += ((uint8_t)pgm_read_byte(&glyph->xAdvance) * (int16_t)textsize)%_width;
             }
         }
 
