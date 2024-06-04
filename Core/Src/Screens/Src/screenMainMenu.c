@@ -1,17 +1,22 @@
 #include "screenMainMenu.h"
 
+#include "main.h"
+
 #include "Text.h"
 #include "Bar.h"
 #include "Button.h"
 #include "Circle.h"
 #include "Player.h"
 #include "Ball.h"
-
+#include "Triangle.h"
+#include "Joystick.h"
 #include "TimeCounter.h"
+
 #include "fonts.h"
 #include "tft.h"
 #include "functions.h"
 
+extern ADC_HandleTypeDef hadc1;
 
 #define DELAY_TIMER_MILLIS 0 
 #define LOW_LIMIT_BARR 150
@@ -24,6 +29,9 @@ struct button btnSettings;
 struct player pl1;
 struct player pl2;
 struct ball bl;
+struct triangle selector;
+struct timeCounter selTime;
+struct joystick js;
 
 bool intersctionCircles( int r1, int x1, int y1, int r2, int x2, int y2)
 {
@@ -115,16 +123,81 @@ int screenMainMenu_show()
   
   ball_init(&bl);
 
+  triangle_draw(&selector);
+  timeCounter_init(&selTime);
+  timeCounter_initTimer(&selTime);
+
+  joystick_init(&js);
+
   return err;
 }
 
-int screenMainMenu_verifyTimer( )
+int changeRow(struct joystick *js   )
+{
+  if ( (selector.x0 == 10 && js->adc_X > 3500) || (selector.x0 == 240 && js->adc_X < 500) )
+  {
+    selector.backgroundColor = WHITE;
+    triangle_draw(&selector);
+    selector.x0 = selector.x0 ==10 ? 240: 10;
+    selector.x1 = selector.x1 ==10 ? 240: 10;
+    selector.x2 = selector.x2 ==30 ? 260: 30;
+    selector.backgroundColor = RED;
+    triangle_draw(&selector);
+  }
+  return -1;
+}
+
+int optionPressed( struct button *btn, struct joystick *js , struct triangle *t , uint16_t distance )
+{
+  if ( !btn->isPressed && !js->sw && (int)(btn->r.xo - t->x0) < distance && (int)(btn->r.xo - t->x0) > 0)
+  {
+    btn->isPressed = true;
+    btn->r.backgroundColor = btn->pressedColor;
+    btn->t.color = btn->pressedTextColor;
+    button_draw(btn);
+  }
+  else if( btn->isPressed && js->sw && (int)(btn->r.xo - t->x0) < distance && (int)(btn->r.xo - t->x0) > 0 )
+  {
+    btn->isPressed = false;
+    btn->r.backgroundColor = btn->releasedColor;
+    btn->t.color = btn->releasedTextColor;
+    button_draw(btn);
+    return 1;
+  }
+  return -1;
+}
+
+int btnStartVal = 0;
+int btnSettingsVal = 0;
+
+int screenMainMenu_optionPressed(struct joystick *js)
+{
+  btnStartVal = optionPressed( &btnStart, js, &selector, 40 );
+  btnSettingsVal = optionPressed( &btnSettings, js, &selector , 40);
+  return -1;
+}
+
+void checkButtons( struct joystick *js  )
+{
+  if ( !btnSettings.isPressed && !btnStart.isPressed )
+  {
+    changeRow(js);
+  }
+  screenMainMenu_optionPressed(js);
+}
+
+int screenMainMenu_verifyTimer( struct screenManager *sm )
 {
   player_animation( &pl1 );
   player_animation( &pl2 );
   ball_animation(&bl);
   ball_direction(&bl);
   screenMainMenu_collision();
+  joystick_getValuesByTimer(&js , checkButtons );
+  if ( btnStartVal == 1 || btnSettingsVal == 1 )
+  {
+    sm->actualScreen = 1;
+  }
   return -1;
 }
 
@@ -217,6 +290,26 @@ int screenMainMenu_init( struct screenManager *sm )
   bl.bll.Y_UpLimit = HIGH_LIMIT_BARR;
   bl.xInit = 240;
   bl.yInit = 160;
+
+  selector.x0 = 10;
+  selector.y0 = 270;
+  selector.x1 = 10;
+  selector.y1 = 290;
+  selector.x2 = 30;
+  selector.y2 = 280;
+  selector.backgroundColor = RED;
+  selector.borderColor = 0;
+  selector.borderSize = 0;
+  
+  selTime.delay = 2000;
+
+  js.sw_port = JS_SW_GPIO_Port;
+  js.swPin = JS_SW_Pin;
+  js.hadc_js = &hadc1;
+  js.adcChannels[0] = 12;
+  js.adcChannels[1] = 13;
+
+  js.tm.delay = 50;
 
   err = screenMainMenu_show();
   return err;

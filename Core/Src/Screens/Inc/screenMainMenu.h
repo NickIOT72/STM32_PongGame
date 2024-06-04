@@ -4,6 +4,6 @@
 #include "ScreenManager.h"
 
 int screenMainMenu_init( struct screenManager *sm  );
-int screenMainMenu_verifyTimer(  );
+int screenMainMenu_verifyTimer( struct screenManager *sm  );
 
 #endif

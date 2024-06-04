@@ -14,7 +14,6 @@ target_compile_definitions(stm32cubemx INTERFACE
 
 target_include_directories(stm32cubemx INTERFACE
     ../../Core/Inc
-    ../../Core/Src/Screens/Inc
     ../../Drivers/STM32F4xx_HAL_Driver/Inc
     ../../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
     ../../Drivers/CMSIS/Device/ST/STM32F4xx/Include
@@ -25,9 +24,6 @@ target_sources(stm32cubemx INTERFACE
     ../../Core/Src/main.c
     ../../Core/Src/stm32f4xx_it.c
     ../../Core/Src/stm32f4xx_hal_msp.c
-    ../../Core/Src/Screens/Src/screenIntro.c
-    ../../Core/Src/Screens/Src/screenBlank.c
-    ../../Core/Src/Screens/Src/screenMainMenu.c
     ../../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c
     ../../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.c
     ../../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_adc.c
