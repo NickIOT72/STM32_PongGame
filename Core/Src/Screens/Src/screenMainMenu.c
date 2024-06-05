@@ -154,14 +154,22 @@ int optionPressed( struct button *btn, struct joystick *js , struct triangle *t 
     btn->isPressed = true;
     btn->r.backgroundColor = btn->pressedColor;
     btn->t.color = btn->pressedTextColor;
+    btn->r.borderColor = btn->pressedTextColor;
+    btn->r.borderSize = 2;
     button_draw(btn);
+    selector.backgroundColor = GREEN;
+    triangle_draw(&selector);
   }
   else if( btn->isPressed && js->sw && (int)(btn->r.xo - t->x0) < distance && (int)(btn->r.xo - t->x0) > 0 )
   {
     btn->isPressed = false;
     btn->r.backgroundColor = btn->releasedColor;
     btn->t.color = btn->releasedTextColor;
+    btn->r.borderColor = 0;
+    btn->r.borderSize = 0;
     button_draw(btn);
+    selector.backgroundColor = RED;
+    triangle_draw(&selector);
     return 1;
   }
   return -1;
@@ -194,10 +202,7 @@ int screenMainMenu_verifyTimer( struct screenManager *sm )
   ball_direction(&bl);
   screenMainMenu_collision();
   joystick_getValuesByTimer(&js , checkButtons );
-  if ( btnStartVal == 1 || btnSettingsVal == 1 )
-  {
-    sm->actualScreen = 1;
-  }
+  if ( btnStartVal == 1 || btnSettingsVal == 1 )sm->actualScreen = btnStartVal == 1? 1: btnSettingsVal == 1 ? 4: sm->actualScreen;
   return -1;
 }
 
@@ -247,8 +252,8 @@ int screenMainMenu_init( struct screenManager *sm )
   btnStart.t.xo = 50;
   btnStart.t.yo = 290;
   btnStart.isPressed = false;
-  btnStart.pressedColor = BLACK;
-  btnStart.pressedTextColor = WHITE;
+  btnStart.pressedColor = WHITE;
+  btnStart.pressedTextColor = CYAN;
   btnStart.releasedColor = CYAN;
   btnStart.releasedTextColor = WHITE;
   btnStart.tm.tStart = 500;
@@ -268,8 +273,8 @@ int screenMainMenu_init( struct screenManager *sm )
   btnSettings.t.xo = 280;
   btnSettings.t.yo = 290;
   btnSettings.isPressed = false;
-  btnSettings.pressedColor = BLACK;
-  btnSettings.pressedTextColor = WHITE;
+  btnSettings.pressedColor = WHITE;
+  btnSettings.pressedTextColor = GREEN;
   btnSettings.releasedColor = GREEN;
   btnSettings.releasedTextColor = WHITE;
   btnSettings.tm.delay = 500;
@@ -291,11 +296,11 @@ int screenMainMenu_init( struct screenManager *sm )
   bl.xInit = 240;
   bl.yInit = 160;
 
-  selector.x0 = 10;
+  selector.x0 = btnSettingsVal == 1 ? 240: 10;
   selector.y0 = 270;
-  selector.x1 = 10;
+  selector.x1 = btnSettingsVal == 1 ? 240: 10;
   selector.y1 = 290;
-  selector.x2 = 30;
+  selector.x2 = btnSettingsVal == 1 ? 260: 30;
   selector.y2 = 280;
   selector.backgroundColor = RED;
   selector.borderColor = 0;

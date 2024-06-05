@@ -30,6 +30,7 @@
 #include "screenIntro.h"
 #include "screenBlank.h"
 #include "screenMainMenu.h"
+#include "screenSettings.h"
 
 #include "fonts.h"
 #include "tft.h"
@@ -95,6 +96,10 @@ void evaluateScreen( struct screenManager *sm )
   {
     screenMainMenu_verifyTimer(sm);
   }
+  else if (sm->actualScreen == 4)
+  {
+    screenSettings_eval(sm);
+  }
 }
 
 void selectScreen( struct screenManager *sm )
@@ -115,6 +120,9 @@ void selectScreen( struct screenManager *sm )
   case 3:
     screenMainMenu_init(sm);
     break;  
+  case 4:
+    screenSettings_init(sm);
+    break;
   default:
     break;
   }

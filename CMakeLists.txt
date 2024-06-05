@@ -65,6 +65,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Core/Src/Screens/Src/screenIntro.c
     Core/Src/Screens/Src/screenBlank.c
     Core/Src/Screens/Src/screenMainMenu.c
+    Core/Src/Screens/Src/screenSettings.c
 )
 
 # Add include paths

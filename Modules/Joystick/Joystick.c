@@ -40,6 +40,10 @@ int joystick_getADCvalues(struct joystick *js)
     }
     adc_r[i] = HAL_ADC_GetValue(js->hadc_js);
   }
+  status = HAL_ADC_Stop(js->hadc_js);
+  if (status != HAL_OK) {
+    Error_Handler_js();
+  }
   js->adc_X = js->adcChannels[0] > js->adcChannels[1]? adc_r[0]:adc_r[1];
   js->adc_y = js->adcChannels[0] < js->adcChannels[1]? adc_r[0]:adc_r[1];
   return -1;
@@ -61,6 +65,7 @@ int joystick_getValuesByTimer( struct joystick *js , void (*f)(struct joystick *
     joystick_getSWvalue(js);
     //f(js);
     (*f)(js);
+
     timeCounter_resetTimer(&js->tm);
   }
   return -1;
