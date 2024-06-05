@@ -22,5 +22,7 @@ struct gameSetting
 };
 
 int screenSettings_init( struct screenManager *sm  );
+int screenSettings_eval(struct screenManager *sm);
+int screenSettings_getSettings(  struct gameSetting *gss);
 
 #endif

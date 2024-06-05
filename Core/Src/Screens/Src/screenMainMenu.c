@@ -110,7 +110,7 @@ int screenMainMenu_show()
   introtext.color = BLACK;
   introtext.f = mono12x7bold;
   introtext.size = 3;
-  strcpy( introtext.text, "PONG GAME" );
+  strcpy( introtext.text, "MAIN MENU" );
   introtext.xo = 40;
   introtext.yo = 60;
   text_draw(&introtext);
@@ -202,7 +202,8 @@ int screenMainMenu_verifyTimer( struct screenManager *sm )
   ball_direction(&bl);
   screenMainMenu_collision();
   joystick_getValuesByTimer(&js , checkButtons );
-  if ( btnStartVal == 1 || btnSettingsVal == 1 )sm->actualScreen = btnStartVal == 1? 1: btnSettingsVal == 1 ? 4: sm->actualScreen;
+  if ( btnStartVal == 1 || btnSettingsVal == 1 )sm->actualScreen = btnStartVal == 1? 5: btnSettingsVal == 1 ? 4: sm->actualScreen;
+  HAL_Delay(1);
   return -1;
 }
 

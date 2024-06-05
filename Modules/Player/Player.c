@@ -13,6 +13,14 @@ int player_init( struct player *pl)
   return -1;
 }
 
+int player_move( struct player *pl )
+{
+  pl->riseDirection?fillRect( pl->b.r.xo , pl->b.r.yo +  pl->b.r.heigth - pl->b.r.circleBorder , pl->b.r.width , pl->b.r.circleBorder, WHITE):fillRect( pl->b.r.xo , pl->b.r.yo , pl->b.r.width , pl->b.r.circleBorder, WHITE);
+  pl->b.r.yo += pl->riseDirection ? -STEP: +STEP;
+  rectangle_draw( &pl->b.r );
+  return -1;
+}
+
 int player_animation( struct player *pl )
 {
   timeCounter_verifyTimer(&pl->b.tm);

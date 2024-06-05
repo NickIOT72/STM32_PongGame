@@ -17,5 +17,6 @@ struct player
 
 int player_init( struct player *pl);
 int player_animation( struct player *pl );
+int player_move( struct player *pl );
 
 #endif

@@ -31,9 +31,17 @@ struct button scoreSel;
 struct button buttonExit;
 struct triangle selector2;
 struct joystick js2;
-struct gameSetting gs = { MODE_TIMER, 2, 30, 2 };
+struct gameSetting gs = { MODE_TIMER, 0, 30, 5 };
 
 uint8_t actual_position_option = 0;
+
+int screenSettings_getSettings(  struct gameSetting *gss)
+{
+  gss->mode = gs.mode;
+  gss->score = gs.score;
+  gss->time_minutes = gs.time_minutes;
+  gss->time_seconds = gs.time_seconds;
+}
 
 int setupOption( int opt )
 {
